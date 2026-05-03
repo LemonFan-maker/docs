@@ -1,0 +1,112 @@
+---
+title: "Hermes Agent 接入"
+description: "配置 Hermes Agent 使用 OrionisLi API"
+icon: "robot"
+---
+
+<Tip>
+  **推荐**：使用 [CC Switch](/tools/cc-switch) 可以一键配置 Hermes Agent 的 API 端点，无需手动编辑文件。
+</Tip>
+
+## 方式一：CC Switch（推荐）
+
+安装 CC Switch 后，在图形界面中添加 OrionisLi provider，选择应用到 Hermes Agent 即可。详见 [CC Switch 文档](/tools/cc-switch)。
+
+## 方式二：环境变量配置
+
+Hermes Agent 通过环境变量配置 API 端点。
+
+### 使用 GPT 模型
+
+```bash
+export OPENAI_BASE_URL=https://sub.orionisli.cn/v1
+export OPENAI_API_KEY=sk-你的密钥
+```
+
+### 使用 Claude 模型
+
+```bash
+export ANTHROPIC_BASE_URL=https://sub.orionisli.cn
+export ANTHROPIC_API_KEY=sk-你的密钥
+```
+
+### 持久化配置
+
+<Tabs>
+  <Tab title="Bash">
+    ```bash
+    echo 'export OPENAI_BASE_URL=https://sub.orionisli.cn/v1' >> ~/.bashrc
+    echo 'export OPENAI_API_KEY=sk-你的密钥' >> ~/.bashrc
+    echo 'export ANTHROPIC_BASE_URL=https://sub.orionisli.cn' >> ~/.bashrc
+    echo 'export ANTHROPIC_API_KEY=sk-你的密钥' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+  </Tab>
+  <Tab title="Zsh">
+    ```bash
+    echo 'export OPENAI_BASE_URL=https://sub.orionisli.cn/v1' >> ~/.zshrc
+    echo 'export OPENAI_API_KEY=sk-你的密钥' >> ~/.zshrc
+    echo 'export ANTHROPIC_BASE_URL=https://sub.orionisli.cn' >> ~/.zshrc
+    echo 'export ANTHROPIC_API_KEY=sk-你的密钥' >> ~/.zshrc
+    source ~/.zshrc
+    ```
+  </Tab>
+</Tabs>
+
+## 方式三：CLI 配置命令
+
+使用 Hermes Agent 自带的配置命令：
+
+```bash
+# 运行配置向导
+hermes setup
+
+# 或手动设置
+hermes config set openai_base_url https://sub.orionisli.cn/v1
+hermes config set openai_api_key sk-你的密钥
+```
+
+## 选择模型
+
+启动 Hermes Agent 后，使用 `hermes model` 命令选择模型：
+
+```bash
+hermes model
+```
+
+在列表中选择通过 OrionisLi API 可用的模型。
+
+## 可用模型
+
+| 类别 | 模型 | 说明 |
+|------|------|------|
+| GPT | `gpt-5.5` | 最新旗舰 |
+| GPT | `gpt-5.4` | 高性能 |
+| GPT | `gpt-5.3-codex` | 代码专用 |
+| Claude | `claude-sonnet-4-6` | 平衡性能 |
+| Claude | `claude-opus-4-7` | 最强能力 |
+
+## 验证配置
+
+运行 Hermes Agent 并尝试发送一条消息：
+
+```bash
+hermes
+> 你好，测试一下连接
+```
+
+如果收到正常响应，说明配置成功。
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="连接超时">
+    确认网络可以访问 `sub.orionisli.cn`，检查防火墙或代理设置。
+  </Accordion>
+  <Accordion title="模型不可用">
+    不同 API Key 有不同的模型权限。通过 `hermes model` 确认选择的模型在你的 Key 权限范围内。
+  </Accordion>
+  <Accordion title="多 provider 配置">
+    Hermes Agent 支持同时配置多个提供商。设置好环境变量后，可以通过 `hermes model` 在不同模型之间切换。
+  </Accordion>
+</AccordionGroup>

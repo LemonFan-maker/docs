@@ -1,0 +1,84 @@
+---
+title: "QwenPaw"
+description: "在 QwenPaw（原 Copaw）中接入 OrionisLi API"
+icon: "paw"
+---
+
+## 什么是 QwenPaw
+
+QwenPaw（原名 Copaw）是一个个人 AI 助手工作站，支持本地部署和云端部署，可通过多种渠道（钉钉、飞书、微信、Discord、Telegram 等）接入。
+
+- GitHub：[agentscope-ai/QwenPaw](https://github.com/agentscope-ai/QwenPaw)
+- 特性：记忆系统、Skills 扩展、多 Agent 协作、多渠道接入
+
+## 安装
+
+<Tabs>
+  <Tab title="pip 安装">
+    ```bash
+    pip install qwenpaw
+    qwenpaw init --defaults
+    qwenpaw app
+    ```
+  </Tab>
+  <Tab title="脚本安装">
+    ```bash
+    curl -fsSL https://qwenpaw.agentscope.io/install.sh | bash
+    ```
+  </Tab>
+  <Tab title="Docker">
+    ```bash
+    docker pull agentscope/qwenpaw:latest
+
+    docker run -d \
+      --name qwenpaw \
+      -p 8088:8088 \
+      -v qwenpaw-data:/app/data \
+      -v qwenpaw-secrets:/app/secrets \
+      agentscope/qwenpaw:latest
+    ```
+  </Tab>
+</Tabs>
+
+## 配置 OrionisLi API
+
+<Steps>
+  <Step title="打开控制台">
+    启动后访问 `http://127.0.0.1:8088/`
+  </Step>
+  <Step title="进入模型设置">
+    在控制台中导航到「设置」→「模型」
+  </Step>
+  <Step title="添加自定义 Provider">
+    选择添加新的模型 provider，填入：
+    - **Base URL**：`https://sub.orionisli.cn/v1`
+    - **API Key**：你的 `sk-` 开头的密钥
+  </Step>
+  <Step title="启用模型">
+    选择要使用的模型并启用
+  </Step>
+</Steps>
+
+## 多渠道接入
+
+QwenPaw 支持通过以下渠道与 AI 交互：
+
+| 渠道 | 说明 |
+|------|------|
+| 钉钉 | 企业内部机器人 |
+| 飞书 | 企业内部机器人 |
+| 微信 | 通过 iLink Bot |
+| Discord | Discord Bot |
+| Telegram | Telegram Bot |
+| Web | 浏览器直接访问 |
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="Docker 中连接 API 失败">
+    Docker 容器中 `localhost` 指向容器本身。如果 API 在宿主机上，使用 `host.docker.internal`。启动时添加：`--add-host=host.docker.internal:host-gateway`
+  </Accordion>
+  <Accordion title="模型不响应">
+    确认在控制台中已正确配置 API Key 并启用了至少一个模型。
+  </Accordion>
+</AccordionGroup>

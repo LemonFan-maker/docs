@@ -1,0 +1,119 @@
+---
+title: "Claude Code 接入"
+description: "配置 Claude Code 使用 OrionisLi API"
+icon: "terminal"
+---
+
+<Tip>
+  **推荐**：使用 [CC Switch](/tools/cc-switch) 可以一键配置 Claude Code 的 API 端点，无需手动编辑文件。
+</Tip>
+
+## 方式一：CC Switch（推荐）
+
+安装 CC Switch 后，在图形界面中添加 OrionisLi provider，选择应用到 Claude Code 即可。详见 [CC Switch 文档](/tools/cc-switch)。
+
+## 方式二：环境变量配置
+
+在终端中设置以下环境变量：
+
+```bash
+export ANTHROPIC_BASE_URL=https://sub.orionisli.cn
+export ANTHROPIC_API_KEY=sk-你的密钥
+```
+
+然后直接启动 Claude Code：
+
+```bash
+claude
+```
+
+### 持久化配置
+
+将环境变量添加到 shell 配置文件中，避免每次手动设置：
+
+<Tabs>
+  <Tab title="Bash">
+    ```bash
+    echo 'export ANTHROPIC_BASE_URL=https://sub.orionisli.cn' >> ~/.bashrc
+    echo 'export ANTHROPIC_API_KEY=sk-你的密钥' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+  </Tab>
+  <Tab title="Zsh">
+    ```bash
+    echo 'export ANTHROPIC_BASE_URL=https://sub.orionisli.cn' >> ~/.zshrc
+    echo 'export ANTHROPIC_API_KEY=sk-你的密钥' >> ~/.zshrc
+    source ~/.zshrc
+    ```
+  </Tab>
+  <Tab title="PowerShell">
+    ```powershell
+    [Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "https://sub.orionisli.cn", "User")
+    [Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-你的密钥", "User")
+    ```
+  </Tab>
+</Tabs>
+
+## 方式三：Settings 配置
+
+通过 Claude Code 的 settings.json 配置：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://sub.orionisli.cn",
+    "ANTHROPIC_API_KEY": "sk-你的密钥"
+  }
+}
+```
+
+Settings 文件位置：
+- **全局**：`~/.claude/settings.json`
+- **项目**：`.claude/settings.json`
+
+项目级配置优先于全局配置。
+
+## 验证配置
+
+启动 Claude Code 后，运行 `/status` 命令检查连接状态：
+
+```bash
+claude
+> /status
+```
+
+如果显示连接成功且模型信息正确，说明配置正确。
+
+## 模型切换
+
+Claude Code 默认使用 Sonnet 模型。你可以通过以下方式切换模型：
+
+- 在 Claude Code 中输入 `/model` 选择模型
+- 或在 settings.json 中指定默认模型
+
+## 可用模型
+
+通过 OrionisLi API，Claude Code 可以使用以下 Claude 模型：
+
+| 模型 | 说明 | 推荐场景 |
+|------|------|---------|
+| `claude-opus-4-7` | 最强能力 | 复杂架构设计、大规模重构 |
+| `claude-sonnet-4-6` | 平衡性能与速度 | 日常开发（默认推荐） |
+| `claude-haiku-4-5` | 最快速度 | 简单问答、快速查询 |
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="连接失败">
+    确认 `ANTHROPIC_BASE_URL` 不含尾部斜杠，应为 `https://sub.orionisli.cn` 而非 `https://sub.orionisli.cn/`。
+  </Accordion>
+  <Accordion title="API Key 无效">
+    确认 API Key 以 `sk-` 开头，并且是从控制台正确复制的完整密钥。
+  </Accordion>
+  <Accordion title="模型不可用">
+    不同 API Key 可能有不同的模型权限。确认你的 Key 有 Claude 模型的访问权限。
+  </Accordion>
+  <Accordion title="CC Switch 配置后不生效">
+    运行 `ccs current` 确认当前激活的 provider 是 OrionisLi。如果不是，运行 `ccs use orionisli` 切换。
+  </Accordion>
+</AccordionGroup>

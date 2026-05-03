@@ -1,0 +1,83 @@
+---
+title: "模型列表"
+description: "OrionisLi API 支持的所有 AI 模型"
+icon: "brain"
+---
+
+## 查看可用模型
+
+通过 API 获取你当前 Key 可用的模型列表：
+
+```bash
+curl https://sub.orionisli.cn/v1/models \
+  -H "Authorization: Bearer sk-你的密钥"
+```
+
+<Note>
+  不同套餐的 API Key 可用的模型不同。以下列表为所有可能支持的模型。
+</Note>
+
+## GPT 系列
+
+| 模型 ID | 说明 | 推荐场景 |
+|---------|------|---------|
+| `gpt-5.5` | 最新旗舰模型，最强综合能力 | 复杂推理、创意写作、架构设计 |
+| `gpt-5.4` | 高性能通用模型 | 日常对话、代码生成、文本处理 |
+| `gpt-5.4-mini` | 轻量版本，速度快成本低 | 简单问答、批量处理 |
+| `gpt-5.4-2026-03-05` | 快照版本，行为固定 | 需要稳定输出的场景 |
+| `gpt-5.2` | 稳定版本 | 稳定性要求高的生产环境 |
+| `gpt-5.2-pro` | Pro 版本，更强推理能力 | 数学、逻辑、复杂分析 |
+| `gpt-5.2-chat-latest` | 最新聊天版本 | 对话场景 |
+| `gpt-5.3-codex` | 代码生成专用 | 代码编写、重构、调试 |
+| `gpt-5.3-codex-spark` | 轻量代码模型 | 快速代码补全 |
+| `gpt-4o-audio-preview` | 支持音频输入 | 语音交互场景 |
+| `gpt-4o-realtime-preview` | 实时对话 | 低延迟实时交互 |
+| `gpt-image-1` | 图像生成 | 基础图像生成 |
+| `gpt-image-1.5` | 图像生成增强版 | 高质量图像 |
+| `gpt-image-2` | 最新图像生成 | 最高质量图像生成 |
+
+## Claude 系列
+
+| 模型 ID | 说明 | 推荐场景 |
+|---------|------|---------|
+| `claude-opus-4-7` | 最强能力，深度推理 | 复杂分析、学术研究、架构设计 |
+| `claude-opus-4-6` | 高级推理 | 复杂任务、长文写作 |
+| `claude-opus-4-5-20251101` | Opus 4.5 | 需要强推理的场景 |
+| `claude-opus-4-20250514` | Opus 4 | 稳定的强推理 |
+| `claude-sonnet-4-6` | 平衡性能与速度 | 日常开发（推荐默认） |
+| `claude-sonnet-4-5-20250929` | Sonnet 4.5 | 中等复杂度任务 |
+| `claude-sonnet-4-20250514` | Sonnet 4 | 稳定的日常使用 |
+| `claude-haiku-4-5-20251001` | 最快速度 | 快速响应、简单任务 |
+| `claude-3-7-sonnet-20250219` | Claude 3.7 Sonnet | 中等任务 |
+| `claude-3-5-sonnet-20241022` | Claude 3.5 Sonnet | 兼容性需求 |
+| `claude-3-5-haiku-20241022` | Claude 3.5 Haiku | 轻量任务 |
+
+## 模型选择建议
+
+### 按场景选择
+
+| 场景 | 推荐模型 | 原因 |
+|------|---------|------|
+| 日常对话 | `gpt-5.4` 或 `claude-sonnet-4-6` | 性价比高，速度快 |
+| 复杂推理 | `gpt-5.5` 或 `claude-opus-4-7` | 最强推理能力 |
+| 代码生成 | `gpt-5.3-codex` 或 `claude-sonnet-4-6` | 代码理解能力强 |
+| 快速响应 | `gpt-5.4-mini` 或 `claude-haiku-4-5` | 延迟低，成本低 |
+| 图像生成 | `gpt-image-2` | 最新图像生成模型 |
+| 长文写作 | `claude-opus-4-7` | 长上下文，输出质量高 |
+
+### 按成本选择
+
+<Note>
+  成本从低到高排列。具体价格请参考[价格说明](/pricing)。
+</Note>
+
+1. **低成本**：`gpt-5.4-mini`、`claude-haiku-4-5`
+2. **中等**：`gpt-5.4`、`claude-sonnet-4-6`
+3. **高性能**：`gpt-5.5`、`claude-opus-4-7`
+
+## 兼容性说明
+
+- 所有 GPT 模型通过 **OpenAI 协议**（`/v1/chat/completions`）调用
+- 所有 Claude 模型通过 **Claude 协议**（`/v1/messages`）调用
+- 模型 ID 区分大小写，请使用上表中的精确 ID
+- 不同套餐的 Key 可用模型范围不同，请在控制台确认

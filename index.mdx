@@ -1,0 +1,90 @@
+---
+title: "OrionisLi API 文档"
+description: "AI API 中转站用户文档 — 支持 OpenAI 和 Claude 协议，覆盖 GPT-5、Claude 4 等主流模型"
+icon: "book"
+---
+
+欢迎使用 **OrionisLi API**！这是一个兼容 OpenAI 和 Claude 协议的 AI API 中转站，让你以更便捷的方式使用各种主流 AI 模型。
+
+## 核心特性
+
+<CardGroup cols={2}>
+  <Card title="双协议兼容" icon="plug">
+    同时支持 OpenAI `/v1/chat/completions` 和 Claude `/v1/messages` 协议
+  </Card>
+  <Card title="主流模型覆盖" icon="brain">
+    GPT-5 系列、Claude 4 系列等最新模型均可使用
+  </Card>
+  <Card title="按量计费" icon="coins">
+    按实际 token 使用量计费，用多少付多少
+  </Card>
+  <Card title="广泛工具支持" icon="wrench">
+    Claude Code、Codex、OpenClaw、Hermes Agent、Cline、Cherry Studio 等
+  </Card>
+</CardGroup>
+
+## API 基础信息
+
+| 项目 | 值 |
+|------|-----|
+| API Base URL | `https://sub.orionisli.cn` |
+| 认证方式 | Bearer Token（`Authorization: Bearer sk-xxx`） |
+| OpenAI 端点 | `POST /v1/chat/completions` |
+| Claude 端点 | `POST /v1/messages` |
+| 模型列表 | `GET /v1/models` |
+
+## 快速开始
+
+<Steps>
+  <Step title="注册账号">
+    前往 [控制台](https://sub.orionisli.cn) 注册账号
+  </Step>
+  <Step title="获取 API Key">
+    在控制台中创建并复制你的 API Key（`sk-` 前缀）
+  </Step>
+  <Step title="发送第一个请求">
+    ```bash
+    curl https://sub.orionisli.cn/v1/chat/completions \
+      -H "Authorization: Bearer sk-你的密钥" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "gpt-5.4",
+        "messages": [{"role": "user", "content": "你好！"}]
+      }'
+    ```
+  </Step>
+</Steps>
+
+## 推荐：CC Switch 一键配置
+
+如果你使用 Claude Code、Codex、OpenClaw 等编程工具，推荐使用 **CC Switch** 一键配置 API 端点：
+
+```bash
+brew tap farion1231/ccswitch
+brew install --cask cc-switch
+```
+
+安装后在图形界面中添加 OrionisLi provider，所有工具自动生效。详见 [CC Switch 文档](/tools/cc-switch)。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="快速开始" href="/quickstart">
+    详细的注册和接入流程
+  </Card>
+  <Card title="编程接入" href="/guides/python">
+    Python、Node.js、Go、curl 等语言的接入教程
+  </Card>
+  <Card title="编程工具" href="/tools/cc-switch">
+    CC Switch、Claude Code、Codex、Cline 等
+  </Card>
+  <Card title="对话工具" href="/tools/cherry-studio">
+    Cherry Studio、Chatbox、LobeChat
+  </Card>
+  <Card title="价格与模型" href="/pricing">
+    查看各模型价格和支持的模型列表
+  </Card>
+  <Card title="API 参考" href="/api-reference/authentication">
+    接口文档和错误码说明
+  </Card>
+</CardGroup>

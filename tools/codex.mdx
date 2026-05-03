@@ -1,0 +1,102 @@
+---
+title: "Codex CLI 接入"
+description: "配置 OpenAI Codex CLI 使用 OrionisLi API"
+icon: "code"
+---
+
+<Tip>
+  **推荐**：使用 [CC Switch](/tools/cc-switch) 可以一键配置 Codex 的 API 端点，无需手动编辑文件。
+</Tip>
+
+## 方式一：CC Switch（推荐）
+
+安装 CC Switch 后，在图形界面中添加 OrionisLi provider，选择应用到 Codex 即可。详见 [CC Switch 文档](/tools/cc-switch)。
+
+## 方式二：配置文件
+
+编辑 `~/.codex/config.toml` 文件：
+
+```toml
+# 默认模型
+model = "gpt-5.5"
+
+# API 端点
+openai_base_url = "https://sub.orionisli.cn/v1"
+```
+
+然后设置环境变量提供 API Key：
+
+<Tabs>
+  <Tab title="Bash/Zsh">
+    ```bash
+    export OPENAI_API_KEY=sk-你的密钥
+    ```
+  </Tab>
+  <Tab title="PowerShell">
+    ```powershell
+    [Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "sk-你的密钥", "User")
+    ```
+  </Tab>
+</Tabs>
+
+### 持久化配置
+
+将环境变量添加到 shell 配置文件：
+
+```bash
+# Bash
+echo 'export OPENAI_API_KEY=sk-你的密钥' >> ~/.bashrc
+source ~/.bashrc
+
+# Zsh
+echo 'export OPENAI_API_KEY=sk-你的密钥' >> ~/.zshrc
+source ~/.zshrc
+```
+
+## 方式三：自定义 Model Provider
+
+如果需要更精细的控制，可以在 config.toml 中定义自定义 provider：
+
+```toml
+model = "gpt-5.5"
+model_provider = "orionisli"
+
+[model_providers.orionisli]
+base_url = "https://sub.orionisli.cn/v1"
+env_key = "OPENAI_API_KEY"
+```
+
+## 启动 Codex
+
+```bash
+codex
+```
+
+## 可用模型
+
+通过 OrionisLi API，Codex 可以使用以下 GPT 模型：
+
+| 模型 | 说明 | 推荐场景 |
+|------|------|---------|
+| `gpt-5.5` | 最新旗舰模型 | 复杂代码生成 |
+| `gpt-5.4` | 高性能模型 | 日常开发 |
+| `gpt-5.2` | 稳定版本 | 稳定性要求高的场景 |
+| `gpt-5.2-pro` | Pro 版本 | 复杂推理 |
+| `gpt-5.3-codex` | 代码专用模型 | 代码生成和重构 |
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="认证失败">
+    确认 `OPENAI_API_KEY` 环境变量已正确设置。Codex 通过此变量读取 API Key。
+  </Accordion>
+  <Accordion title="config.toml 不存在">
+    手动创建文件：
+    ```bash
+    mkdir -p ~/.codex && touch ~/.codex/config.toml
+    ```
+  </Accordion>
+  <Accordion title="模型名称不识别">
+    确认 config.toml 中的 `model` 值是 API 支持的模型 ID。运行 `curl https://sub.orionisli.cn/v1/models -H "Authorization: Bearer $OPENAI_API_KEY"` 查看可用模型。
+  </Accordion>
+</AccordionGroup>

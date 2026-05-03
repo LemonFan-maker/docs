@@ -1,0 +1,67 @@
+---
+title: "Cherry Studio"
+description: "在 Cherry Studio 中接入 OrionisLi API"
+icon: "cherry"
+---
+
+## 什么是 Cherry Studio
+
+Cherry Studio 是一款全平台 AI 桌面客户端，支持 Windows、macOS 和 Linux。内置 300+ AI 助手，支持多模型接入，无需环境配置，开箱即用。
+
+- 官网：[cherry-ai.com](https://cherry-ai.com)
+- 支持平台：Windows / macOS / Linux
+
+## 安装
+
+前往 [Cherry Studio 官网](https://cherry-ai.com) 下载对应平台的安装包。
+
+## 配置 OpenAI 兼容接口
+
+<Steps>
+  <Step title="打开设置">
+    启动 Cherry Studio，点击左侧边栏的「设置」图标
+  </Step>
+  <Step title="添加服务商">
+    在「模型服务」中，找到「自定义服务商」或「OpenAI Compatible」选项，点击添加
+  </Step>
+  <Step title="填写配置">
+    - **API Host**：`https://sub.orionisli.cn`
+    - **API Key**：你的 `sk-` 开头的密钥
+  </Step>
+  <Step title="添加模型">
+    添加你需要使用的模型 ID，例如：
+    - `gpt-5.5`
+    - `gpt-5.4`
+    - `claude-sonnet-4-6`
+  </Step>
+  <Step title="验证连接">
+    点击「检测」按钮，确认连接成功
+  </Step>
+</Steps>
+
+## 配置 Claude 接口
+
+如果需要使用 Claude 系列模型：
+
+1. 在「模型服务」中选择「Anthropic」或「自定义」
+2. 填入 API 地址：`https://sub.orionisli.cn`
+3. 填入 API 密钥：你的 `sk-` 开头的密钥
+4. 添加 Claude 模型 ID（如 `claude-sonnet-4-6`）
+
+## 常用功能
+
+- **多模型对话**：同时与多个模型对话，对比输出
+- **文档处理**：支持文本、图片、Office 文件、PDF
+- **内置助手**：300+ 预置 AI 助手，覆盖各种场景
+- **本地存储**：数据保存在本地，保护隐私
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="连接失败">
+    确认 API Host 为 `https://sub.orionisli.cn`，不要加 `/v1` 后缀。Cherry Studio 会自动补全路径。
+  </Accordion>
+  <Accordion title="模型列表为空">
+    手动添加模型 ID。不同套餐的 Key 可用模型不同，请在[控制台](https://sub.orionisli.cn)确认你的套餐包含哪些模型。
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,73 @@
+---
+title: "错误码说明"
+description: "常见错误码及解决方法"
+icon: "circle-exclamation"
+---
+
+## 错误响应格式
+
+```json
+{
+  "error": {
+    "message": "错误描述",
+    "type": "error_type"
+  }
+}
+```
+
+或 OpenAI 格式：
+
+```json
+{
+  "code": "ERROR_CODE",
+  "message": "错误描述"
+}
+```
+
+## 常见错误码
+
+### 认证相关
+
+| 错误码 | HTTP 状态码 | 说明 | 解决方法 |
+|--------|-----------|------|---------|
+| `API_KEY_REQUIRED` | 401 | 未提供 API Key | 在请求头中添加 `Authorization: Bearer sk-xxx` |
+| `INVALID_API_KEY` | 401 | API Key 无效 | 检查 Key 是否正确，是否已过期或被禁用 |
+
+### 模型相关
+
+| 错误码 | HTTP 状态码 | 说明 | 解决方法 |
+|--------|-----------|------|---------|
+| `model not found` | 404 | 模型不存在 | 检查模型 ID 拼写，通过 `/v1/models` 查看可用模型 |
+| `Upstream access forbidden` | 403 | 无权访问该模型 | 你的套餐可能不包含此模型，联系管理员确认 |
+
+### 请求相关
+
+| 错误码 | HTTP 状态码 | 说明 | 解决方法 |
+|--------|-----------|------|---------|
+| `429` | 429 | 请求频率超限 | 降低请求频率，稍后重试 |
+| `500` | 500 | 服务器内部错误 | 稍后重试，如持续出现请联系支持 |
+| `502` | 502 | 上游服务不可用 | 上游 API 暂时不可用，稍后重试 |
+
+## 排错步骤
+
+<Steps>
+  <Step title="检查 API Key">
+    确认 API Key 以 `sk-` 开头，且从控制台正确复制
+  </Step>
+  <Step title="检查请求格式">
+    确认 `Content-Type: application/json` 已设置，JSON 格式正确
+  </Step>
+  <Step title="检查模型 ID">
+    通过 `GET /v1/models` 确认模型 ID 在你的可用列表中
+  </Step>
+  <Step title="检查 Base URL">
+    确认 Base URL 为 `https://sub.orionisli.cn`，不含尾部多余路径
+  </Step>
+</Steps>
+
+## 联系支持
+
+如问题仍未解决，请联系 QQ: 2254650260，并提供：
+- 错误信息全文
+- 使用的模型和端点
+- 请求代码或 curl 命令

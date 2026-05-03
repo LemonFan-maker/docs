@@ -1,0 +1,69 @@
+---
+title: "Chatbox AI"
+description: "在 Chatbox 中接入 OrionisLi API"
+icon: "message"
+---
+
+## 什么是 Chatbox AI
+
+Chatbox 是一款跨平台 AI 客户端，支持 Windows、macOS、Linux、Android、iOS 和 Web。兼容数百种主流 AI 模型，支持使用自己的 API Key 接入。
+
+- 官网：[chatboxai.app](https://chatboxai.app)
+- 支持平台：Windows / macOS / Linux / Android / iOS / Web
+
+## 安装
+
+前往 [Chatbox 官网](https://chatboxai.app) 下载对应平台的版本。
+
+## 配置步骤
+
+<Steps>
+  <Step title="打开设置">
+    启动 Chatbox，点击左侧边栏的「设置」按钮
+  </Step>
+  <Step title="进入模型供应商">
+    在设置页面中，选择「模型供应商」选项卡
+  </Step>
+  <Step title="添加自定义供应商">
+    点击页面底部的「添加」按钮
+  </Step>
+  <Step title="填写配置信息">
+    - **API 供应商名称**：`OrionisLi`（自定义名称）
+    - **API 类型**：选择「OpenAI API 兼容」
+    - **API Key**：你的 `sk-` 开头的密钥
+    - **API Host**：`https://sub.orionisli.cn`
+    - **API Path**：保持默认 `/v1/chat/completions`（不需要修改）
+  </Step>
+  <Step title="添加模型">
+    添加至少一个模型：
+    - 模型名称：`gpt-5.4`（或其他可用模型 ID）
+    - 可选：勾选对应的能力配置（如视觉、函数调用等）
+  </Step>
+  <Step title="验证连接">
+    点击「检查」按钮，应显示「连接成功」
+  </Step>
+</Steps>
+
+## 使用
+
+配置完成后，返回主页，创建新对话即可开始使用。
+
+## 支持的功能
+
+- **文档对话**：上传文档进行对话
+- **实时联网搜索**：搜索网页获取最新信息
+- **AI 绘图**：使用支持图像生成的模型
+- **代码高亮**：代码块语法高亮显示
+- **LaTeX 渲染**：数学公式渲染
+- **本地存储**：数据保存在本地设备
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="连接检查失败">
+    确认 API Host 填写正确，格式为 `https://sub.orionisli.cn`，不要包含 `/v1` 路径。
+  </Accordion>
+  <Accordion title="模型不可用">
+    确认添加的模型 ID 在你的 API Key 权限范围内。可通过 `curl https://sub.orionisli.cn/v1/models -H "Authorization: Bearer sk-你的密钥"` 查看可用模型。
+  </Accordion>
+</AccordionGroup>

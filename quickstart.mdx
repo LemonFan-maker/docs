@@ -1,0 +1,121 @@
+---
+title: "快速开始"
+description: "5 分钟内完成 OrionisLi API 的接入"
+icon: "rocket"
+---
+
+本指南帮助你快速完成 OrionisLi API 的接入，从注册到发出第一个请求。
+
+## 第一步：注册账号
+
+前往 [OrionisLi API 控制台](https://sub.orionisli.cn) 完成注册。注册时需要验证邮箱。
+
+<Tip>
+  如果你已有账号，直接登录即可。
+</Tip>
+
+## 第二步：获取 API Key
+
+<Steps>
+  <Step title="登录控制台">
+    访问 [https://sub.orionisli.cn](https://sub.orionisli.cn) 并登录
+  </Step>
+  <Step title="创建 API Key">
+    在控制台的「令牌」页面，点击「创建新令牌」，为令牌设置一个名称，然后点击确认
+  </Step>
+  <Step title="复制 API Key">
+    创建完成后，复制生成的 API Key。它以 `sk-` 开头，请妥善保管
+  </Step>
+</Steps>
+
+<Warning>
+  API Key 只会显示一次，请立即复制保存。如果遗失，需要重新创建。
+</Warning>
+
+## 第三步：发送第一个请求
+
+### 使用 curl
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [
+      {"role": "user", "content": "你好，请介绍一下你自己"}
+    ]
+  }'
+```
+
+### 使用 Python
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的密钥",
+    base_url="https://sub.orionisli.cn/v1"
+)
+
+response = client.chat.completions.create(
+    model="gpt-5.4",
+    messages=[{"role": "user", "content": "你好，请介绍一下你自己"}]
+)
+
+print(response.choices[0].message.content)
+```
+
+### 使用 Claude 协议
+
+```bash
+curl https://sub.orionisli.cn/v1/messages \
+  -H "x-api-key: sk-你的密钥" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "max_tokens": 1024,
+    "messages": [
+      {"role": "user", "content": "你好，请介绍一下你自己"}
+    ]
+  }'
+```
+
+## 第四步：验证响应
+
+如果一切正常，你将收到类似以下的 JSON 响应：
+
+```json
+{
+  "id": "chatcmpl-xxx",
+  "object": "chat.completion",
+  "model": "gpt-5.4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "你好！我是..."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 50,
+    "total_tokens": 62
+  }
+}
+```
+
+## 遇到问题？
+
+<CardGroup cols={2}>
+  <Card title="错误码说明" href="/api-reference/errors">
+    查看常见错误码及解决方法
+  </Card>
+  <Card title="联系支持">
+    QQ: 2254650260
+  </Card>
+</CardGroup>

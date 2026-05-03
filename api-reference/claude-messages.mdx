@@ -1,0 +1,158 @@
+---
+title: "Messages"
+description: "Claude 兼容的消息接口"
+icon: "message-dots"
+---
+
+## `POST /v1/messages`
+
+Anthropic Claude 兼容的消息接口，适用于所有 Claude 系列模型。
+
+### 请求头
+
+| 头字段 | 值 |
+|--------|-----|
+| `x-api-key` | `sk-你的密钥` |
+| `anthropic-version` | `2023-06-01` |
+| `Content-Type` | `application/json` |
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型 ID，如 `claude-sonnet-4-6` |
+| `messages` | array | 是 | 消息数组 |
+| `max_tokens` | integer | 是 | 最大输出 token 数 |
+| `system` | string | 否 | 系统提示词（顶级参数，不在 messages 中） |
+| `temperature` | number | 否 | 采样温度，0-1，默认 1 |
+| `stream` | boolean | 否 | 是否流式输出，默认 false |
+| `top_p` | number | 否 | 核采样参数 |
+| `top_k` | integer | 否 | Top-K 采样 |
+
+### messages 格式
+
+```json
+[
+  {"role": "user", "content": "你好"},
+  {"role": "assistant", "content": "你好！有什么可以帮你的？"},
+  {"role": "user", "content": "请介绍一下你自己"}
+]
+```
+
+<Note>
+  与 OpenAI 不同，Claude 的系统提示词通过顶级 `system` 参数传递，而不是放在 messages 中。
+</Note>
+
+### 响应格式
+
+```json
+{
+  "id": "msg_xxx",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "text",
+      "text": "你好！我是..."
+    }
+  ],
+  "model": "claude-sonnet-4-6",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 12,
+    "output_tokens": 50
+  }
+}
+```
+
+### stop_reason 值
+
+| 值 | 说明 |
+|----|------|
+| `end_turn` | 正常结束 |
+| `max_tokens` | 达到 max_tokens 限制 |
+| `stop_sequence` | 匹配到停止序列 |
+
+### 流式响应
+
+当 `stream: true` 时，响应为 SSE 流。主要事件类型：
+
+```json
+{"type": "message_start", "message": {...}}
+{"type": "content_block_start", "index": 0, "content_block": {"type": "text", "text": ""}}
+{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "你好"}}
+{"type": "content_block_stop", "index": 0}
+{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 50}}
+{"type": "message_stop"}
+```
+
+### 调用示例
+
+<Tabs>
+  <Tab title="curl">
+    ```bash
+    curl https://sub.orionisli.cn/v1/messages \
+      -H "x-api-key: sk-你的密钥" \
+      -H "anthropic-version: 2023-06-01" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "claude-sonnet-4-6",
+        "max_tokens": 1024,
+        "system": "你是一个有帮助的助手",
+        "messages": [
+          {"role": "user", "content": "你好"}
+        ]
+      }'
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    import anthropic
+
+    client = anthropic.Anthropic(
+        api_key="sk-你的密钥",
+        base_url="https://sub.orionisli.cn"
+    )
+
+    message = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1024,
+        system="你是一个有帮助的助手",
+        messages=[
+            {"role": "user", "content": "你好"}
+        ]
+    )
+
+    print(message.content[0].text)
+    ```
+  </Tab>
+  <Tab title="Node.js">
+    ```javascript
+    import Anthropic from "@anthropic-ai/sdk";
+
+    const client = new Anthropic({
+      apiKey: "sk-你的密钥",
+      baseURL: "https://sub.orionisli.cn",
+    });
+
+    const message = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1024,
+      system: "你是一个有帮助的助手",
+      messages: [{ role: "user", content: "你好" }],
+    });
+
+    console.log(message.content[0].text);
+    ```
+  </Tab>
+</Tabs>
+
+## 与 OpenAI 接口的区别
+
+| 特性 | OpenAI `/v1/chat/completions` | Claude `/v1/messages` |
+|------|------|------|
+| 认证头 | `Authorization: Bearer` | `x-api-key` |
+| 系统提示 | `messages` 中 `role: system` | 顶级 `system` 参数 |
+| `max_tokens` | 可选 | **必填** |
+| 响应内容 | `choices[0].message.content` | `content[0].text` |
+| 需要版本头 | 否 | `anthropic-version: 2023-06-01` |

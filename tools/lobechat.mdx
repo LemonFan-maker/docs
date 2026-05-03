@@ -1,0 +1,77 @@
+---
+title: "LobeChat"
+description: "在 LobeChat 中接入 OrionisLi API"
+icon: "robot"
+---
+
+## 什么是 LobeChat
+
+LobeChat 是一个开源的 AI 聊天框架，支持多种 LLM 提供商、MCP 插件系统、语音对话、图像生成等功能。可以自行部署在服务器或本地。
+
+- GitHub：[lobehub/lobe-chat](https://github.com/lobehub/lobe-chat)
+- 官网：[lobehub.com](https://lobehub.com)
+
+## 部署方式
+
+<Tabs>
+  <Tab title="Docker 部署（推荐）">
+    ```bash
+    docker run -d \
+      --name lobe-chat \
+      -p 3210:3210 \
+      -e OPENAI_API_KEY=sk-你的密钥 \
+      -e OPENAI_PROXY_URL=https://sub.orionisli.cn/v1 \
+      lobehub/lobe-chat
+    ```
+
+    启动后访问 `http://localhost:3210` 即可使用。
+  </Tab>
+  <Tab title="Vercel 部署">
+    1. Fork [lobe-chat 仓库](https://github.com/lobehub/lobe-chat)
+    2. 在 Vercel 中导入项目
+    3. 设置环境变量：
+       - `OPENAI_API_KEY`：你的 API Key
+       - `OPENAI_PROXY_URL`：`https://sub.orionisli.cn/v1`
+    4. 部署
+  </Tab>
+</Tabs>
+
+## 环境变量配置
+
+| 变量 | 说明 | 示例值 |
+|------|------|--------|
+| `OPENAI_API_KEY` | API 密钥 | `sk-你的密钥` |
+| `OPENAI_PROXY_URL` | API 代理地址 | `https://sub.orionisli.cn/v1` |
+| `OPENAI_MODEL_LIST` | 自定义模型列表 | 见下方说明 |
+
+### 自定义模型列表
+
+使用 `OPENAI_MODEL_LIST` 环境变量可以添加、隐藏或重命名模型：
+
+```bash
+# 添加模型（用 + 分隔）
+OPENAI_MODEL_LIST=gpt-5.5,gpt-5.4,claude-sonnet-4-6
+
+# 隐藏模型（用 - 前缀）
+OPENAI_MODEL_LIST=-gpt-3.5-turbo,gpt-5.5
+```
+
+## 界面配置
+
+如果不想使用环境变量，也可以在 LobeChat 界面中配置：
+
+1. 打开 LobeChat，进入「设置」
+2. 选择「语言模型」
+3. 在 OpenAI 一栏中填入 API Key 和代理地址
+4. 保存
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="Docker 中连接失败">
+    Docker 容器内的 `localhost` 指向容器本身。如果 API 在宿主机上，使用 `host.docker.internal` 替代。添加参数：`--add-host=host.docker.internal:host-gateway`
+  </Accordion>
+  <Accordion title="模型列表不显示">
+    确认 `OPENAI_PROXY_URL` 设置正确，且 API Key 有效。LobeChat 会自动从 `/v1/models` 获取可用模型。
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,63 @@
+---
+title: "认证"
+description: "OrionisLi API 的认证方式"
+icon: "key"
+---
+
+## API Key 格式
+
+所有 API Key 以 `sk-` 开头，格式示例：
+
+```
+sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+## 认证方式
+
+### 方式一：Authorization 头（推荐）
+
+使用 Bearer Token 认证：
+
+```
+Authorization: Bearer sk-你的密钥
+```
+
+适用于 OpenAI 兼容端点（`/v1/chat/completions`、`/v1/models`）。
+
+### 方式二：x-api-key 头
+
+```
+x-api-key: sk-你的密钥
+```
+
+适用于 Claude 兼容端点（`/v1/messages`）。
+
+## 请求示例
+
+<Tabs>
+  <Tab title="OpenAI 格式">
+    ```bash
+    curl https://sub.orionisli.cn/v1/chat/completions \
+      -H "Authorization: Bearer sk-你的密钥" \
+      -H "Content-Type: application/json" \
+      -d '{"model": "gpt-5.4", "messages": [{"role": "user", "content": "你好"}]}'
+    ```
+  </Tab>
+  <Tab title="Claude 格式">
+    ```bash
+    curl https://sub.orionisli.cn/v1/messages \
+      -H "x-api-key: sk-你的密钥" \
+      -H "anthropic-version: 2023-06-01" \
+      -H "Content-Type: application/json" \
+      -d '{"model": "claude-sonnet-4-6", "max_tokens": 1024, "messages": [{"role": "user", "content": "你好"}]}'
+    ```
+  </Tab>
+</Tabs>
+
+## 安全提示
+
+<Warning>
+  - 不要在公开代码仓库中硬编码 API Key
+  - 建议使用环境变量存储密钥
+  - 如果怀疑密钥泄露，请立即在控制台重新生成
+</Warning>

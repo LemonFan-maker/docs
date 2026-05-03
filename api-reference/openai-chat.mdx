@@ -1,0 +1,198 @@
+---
+title: "Chat Completions"
+description: "OpenAI 兼容的聊天补全接口"
+icon: "message"
+---
+
+## `POST /v1/chat/completions`
+
+OpenAI 兼容的聊天补全接口，适用于所有 GPT 系列模型。
+
+### 请求头
+
+| 头字段 | 值 |
+|--------|-----|
+| `Authorization` | `Bearer sk-你的密钥` |
+| `Content-Type` | `application/json` |
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型 ID，如 `gpt-5.4` |
+| `messages` | array | 是 | 消息数组 |
+| `temperature` | number | 否 | 采样温度，0-2，默认 1。值越低越确定 |
+| `max_tokens` | integer | 否 | 最大输出 token 数 |
+| `stream` | boolean | 否 | 是否流式输出，默认 false |
+| `top_p` | number | 否 | 核采样参数，默认 1 |
+| `frequency_penalty` | number | 否 | 频率惩罚，-2 到 2，默认 0 |
+| `presence_penalty` | number | 否 | 存在惩罚，-2 到 2，默认 0 |
+| `stop` | string/array | 否 | 停止序列 |
+| `tools` | array | 否 | 可用的函数列表（Function Calling） |
+| `tool_choice` | string/object | 否 | 函数调用策略：`auto`、`none`、或指定函数 |
+
+### messages 格式
+
+```json
+[
+  {"role": "system", "content": "你是一个有帮助的助手"},
+  {"role": "user", "content": "你好"},
+  {"role": "assistant", "content": "你好！有什么可以帮你的？"},
+  {"role": "user", "content": "请介绍一下你自己"}
+]
+```
+
+角色说明：
+- `system`：系统提示词，设定 AI 的行为
+- `user`：用户消息
+- `assistant`：AI 回复（用于多轮对话上下文）
+
+### 响应格式
+
+```json
+{
+  "id": "chatcmpl-xxx",
+  "object": "chat.completion",
+  "created": 1700000000,
+  "model": "gpt-5.4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "你好！我是..."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 50,
+    "total_tokens": 62
+  }
+}
+```
+
+### finish_reason 值
+
+| 值 | 说明 |
+|----|------|
+| `stop` | 正常结束 |
+| `length` | 达到 max_tokens 限制 |
+| `tool_calls` | 模型请求调用函数 |
+| `content_filter` | 内容被过滤 |
+
+### 流式响应
+
+当 `stream: true` 时，响应为 SSE 流，每个 chunk 格式：
+
+```json
+{
+  "id": "chatcmpl-xxx",
+  "object": "chat.completion.chunk",
+  "choices": [
+    {
+      "index": 0,
+      "delta": {
+        "content": "你好"
+      },
+      "finish_reason": null
+    }
+  ]
+}
+```
+
+流结束时：
+
+```json
+{
+  "id": "chatcmpl-xxx",
+  "object": "chat.completion.chunk",
+  "choices": [
+    {
+      "index": 0,
+      "delta": {},
+      "finish_reason": "stop"
+    }
+  ]
+}
+```
+
+### 调用示例
+
+<Tabs>
+  <Tab title="curl">
+    ```bash
+    curl https://sub.orionisli.cn/v1/chat/completions \
+      -H "Authorization: Bearer sk-你的密钥" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "gpt-5.4",
+        "messages": [
+          {"role": "system", "content": "你是一个有帮助的助手"},
+          {"role": "user", "content": "你好"}
+        ],
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }'
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI(
+        api_key="sk-你的密钥",
+        base_url="https://sub.orionisli.cn/v1"
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-5.4",
+        messages=[
+            {"role": "system", "content": "你是一个有帮助的助手"},
+            {"role": "user", "content": "你好"}
+        ],
+        temperature=0.7,
+        max_tokens=1000
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </Tab>
+  <Tab title="Node.js">
+    ```javascript
+    import OpenAI from "openai";
+
+    const client = new OpenAI({
+      apiKey: "sk-你的密钥",
+      baseURL: "https://sub.orionisli.cn/v1",
+    });
+
+    const response = await client.chat.completions.create({
+      model: "gpt-5.4",
+      messages: [
+        { role: "system", content: "你是一个有帮助的助手" },
+        { role: "user", content: "你好" },
+      ],
+      temperature: 0.7,
+      max_tokens: 1000,
+    });
+
+    console.log(response.choices[0].message.content);
+    ```
+  </Tab>
+</Tabs>
+
+### 错误响应
+
+```json
+{
+  "error": {
+    "message": "Invalid API key",
+    "type": "invalid_request_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+常见错误码见 [错误码说明](/api-reference/errors)。

@@ -1,0 +1,113 @@
+---
+title: "CC Switch（推荐）"
+description: "一键切换 Claude Code、Codex、OpenClaw 等工具的 API 配置"
+icon: "arrows-rotate"
+---
+
+<Info>
+  **推荐方式**：CC Switch 是管理多个 AI 编程工具 API 配置的最佳方式。一次配置，所有工具生效。
+</Info>
+
+## 什么是 CC Switch
+
+CC Switch 是一个跨平台桌面工具，统一管理以下 AI 编程 CLI 工具的 API 配置：
+
+- **Claude Code**
+- **Codex**
+- **OpenCode**
+- **OpenClaw**
+- **Gemini CLI**
+
+你不需要手动编辑各种配置文件，只需在 CC Switch 的图形界面中添加 provider，即可一键切换。
+
+## 核心功能
+
+<CardGroup cols={2}>
+  <Card title="50+ 内置预设" icon="list">
+    包含 AWS Bedrock、NVIDIA NIM、各种社区中转站等预设配置
+  </Card>
+  <Card title="一键切换" icon="toggle-on">
+    系统托盘快速访问，随时切换不同的 API provider
+  </Card>
+  <Card title="MCP 统一管理" icon="plug">
+    跨工具统一管理 MCP 服务器和 Skills
+  </Card>
+  <Card title="用量追踪" icon="chart-line">
+    监控花费、请求数和 token 使用量
+  </Card>
+</CardGroup>
+
+## 安装
+
+<Tabs>
+  <Tab title="macOS（推荐）">
+    ```bash
+    brew tap farion1231/ccswitch
+    brew install --cask cc-switch
+    ```
+
+    更新：
+    ```bash
+    brew upgrade --cask cc-switch
+    ```
+  </Tab>
+  <Tab title="Windows">
+    前往 [GitHub Releases](https://github.com/farion1231/cc-switch/releases) 下载 `.msi` 安装包或 `.zip` 便携版。
+  </Tab>
+  <Tab title="Linux">
+    ```bash
+    # Arch Linux
+    paru -S cc-switch-bin
+
+    # Debian/Ubuntu
+    # 下载 .deb 包安装
+    # Fedora
+    # 下载 .rpm 包安装
+    # 通用
+    # 下载 .AppImage 运行
+    ```
+  </Tab>
+</Tabs>
+
+## 配置 OrionisLi API
+
+<Steps>
+  <Step title="打开 CC Switch">
+    启动 CC Switch 应用
+  </Step>
+  <Step title="添加自定义 Provider">
+    点击「添加 Provider」，选择「自定义」
+  </Step>
+  <Step title="填写配置信息">
+    - **名称**：`OrionisLi`（或你喜欢的名称）
+    - **Base URL**：`https://sub.orionisli.cn`
+    - **API Key**：你的 `sk-` 开头的密钥
+  </Step>
+  <Step title="选择要应用的工具">
+    勾选你需要使用的工具（Claude Code、Codex、OpenClaw 等）
+  </Step>
+  <Step title="激活配置">
+    点击「应用」，CC Switch 会自动写入各工具的配置文件
+  </Step>
+</Steps>
+
+配置完成后，直接在终端中使用 `claude`、`codex`、`openclaw` 等命令即可，无需再手动设置环境变量。
+
+## 系统要求
+
+| 系统 | 最低版本 |
+|------|---------|
+| Windows | 10+ |
+| macOS | 12 (Monterey)+ |
+| Ubuntu | 22.04+ |
+| Debian | 11+ |
+| Fedora | 34+ |
+
+## 数据存储位置
+
+| 数据 | 路径 |
+|------|------|
+| 数据库 | `~/.cc-switch/cc-switch.db` |
+| 设置 | `~/.cc-switch/settings.json` |
+| 自动备份 | `~/.cc-switch/backups/`（保留最近 10 份） |
+| Skills | `~/.cc-switch/skills/` |

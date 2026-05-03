@@ -1,0 +1,71 @@
+---
+title: "VS Code 扩展"
+description: "在 Cline 和 RooCode 中接入 OrionisLi API"
+icon: "code"
+---
+
+## Cline
+
+Cline 是 VS Code 中的 AI 编程助手扩展，支持自动编辑文件、运行命令、浏览网页等。
+
+### 安装
+
+1. 打开 VS Code
+2. 进入扩展市场（`Ctrl+Shift+X` / `Cmd+Shift+X`）
+3. 搜索「Cline」并安装
+
+### 配置
+
+<Steps>
+  <Step title="打开 Cline 设置">
+    在 VS Code 侧边栏点击 Cline 图标，进入设置
+  </Step>
+  <Step title="选择 API Provider">
+    在「API Provider」中选择「OpenAI Compatible」
+  </Step>
+  <Step title="填写配置">
+    - **Base URL**：`https://sub.orionisli.cn/v1`
+    - **API Key**：你的 `sk-` 开头的密钥
+  </Step>
+  <Step title="选择模型">
+    在模型下拉框中选择你要使用的模型，如 `gpt-5.5`
+  </Step>
+</Steps>
+
+## RooCode
+
+RooCode（原 Roo-Cline）是另一个 VS Code AI 编程扩展，功能类似 Cline。
+
+### 安装
+
+1. 打开 VS Code
+2. 进入扩展市场
+3. 搜索「Roo Code」并安装
+
+### 配置
+
+<Steps>
+  <Step title="打开 RooCode 设置">
+    在 VS Code 侧边栏点击 RooCode 图标
+  </Step>
+  <Step title="配置 API Provider">
+    选择「OpenAI Compatible」或「Custom」
+  </Step>
+  <Step title="填写配置">
+    - **Base URL**：`https://sub.orionisli.cn/v1`
+    - **API Key**：你的 `sk-` 开头的密钥
+  </Step>
+  <Step title="选择模型">
+    选择你要使用的模型 ID
+  </Step>
+</Steps>
+
+## 通用提示
+
+<Note>
+  Cline 和 RooCode 都基于 OpenAI 兼容协议，因此使用 GPT 系列模型效果最佳。如果需要使用 Claude 模型，建议使用 Claude Code。
+</Note>
+
+<Warning>
+  在 VS Code 扩展中使用 API 时，请注意 token 消耗。长时间的编程对话可能消耗较多 token。
+</Warning>

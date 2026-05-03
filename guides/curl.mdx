@@ -1,0 +1,211 @@
+---
+title: "curl 接入指南"
+description: "使用 curl 命令行直接调用 OrionisLi API"
+icon: "terminal"
+---
+
+## OpenAI 格式
+
+### 基本请求
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [
+      {"role": "user", "content": "你好"}
+    ]
+  }'
+```
+
+### 带系统提示词
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [
+      {"role": "system", "content": "你是一个专业的翻译助手"},
+      {"role": "user", "content": "把这段翻译成英文：人工智能正在改变世界"}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 500
+  }'
+```
+
+### 多轮对话
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [
+      {"role": "system", "content": "你是一个有帮助的助手"},
+      {"role": "user", "content": "什么是机器学习？"},
+      {"role": "assistant", "content": "机器学习是人工智能的一个分支..."},
+      {"role": "user", "content": "能举个例子吗？"}
+    ]
+  }'
+```
+
+### 流式请求
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [{"role": "user", "content": "讲一个短故事"}],
+    "stream": true
+  }'
+```
+
+### 函数调用
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [{"role": "user", "content": "北京天气怎么样？"}],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "获取天气",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {"type": "string", "description": "城市"}
+            },
+            "required": ["city"]
+          }
+        }
+      }
+    ]
+  }'
+```
+
+### 图像输入
+
+```bash
+curl https://sub.orionisli.cn/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的密钥" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "text", "text": "这张图片里有什么？"},
+          {"type": "image_url", "image_url": {"url": "https://example.com/image.jpg"}}
+        ]
+      }
+    ]
+  }'
+```
+
+## Claude 格式
+
+### 基本请求
+
+```bash
+curl https://sub.orionisli.cn/v1/messages \
+  -H "x-api-key: sk-你的密钥" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "max_tokens": 1024,
+    "messages": [
+      {"role": "user", "content": "你好"}
+    ]
+  }'
+```
+
+### 带系统提示词
+
+```bash
+curl https://sub.orionisli.cn/v1/messages \
+  -H "x-api-key: sk-你的密钥" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "max_tokens": 1024,
+    "system": "你是一个资深 Python 开发者",
+    "messages": [
+      {"role": "user", "content": "Python 中如何处理并发？"}
+    ]
+  }'
+```
+
+### 流式请求
+
+```bash
+curl https://sub.orionisli.cn/v1/messages \
+  -H "x-api-key: sk-你的密钥" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "max_tokens": 1024,
+    "messages": [{"role": "user", "content": "讲一个短故事"}],
+    "stream": true
+  }'
+```
+
+## 查看可用模型
+
+```bash
+curl https://sub.orionisli.cn/v1/models \
+  -H "Authorization: Bearer sk-你的密钥"
+```
+
+格式化输出：
+
+```bash
+curl https://sub.orionisli.cn/v1/models \
+  -H "Authorization: Bearer sk-你的密钥" | jq '.data[].id'
+```
+
+## PowerShell 等价命令
+
+在 Windows PowerShell 中使用 `Invoke-RestMethod`：
+
+```powershell
+$headers = @{
+    "Authorization" = "Bearer sk-你的密钥"
+    "Content-Type" = "application/json"
+}
+
+$body = @{
+    model = "gpt-5.4"
+    messages = @(
+        @{ role = "user"; content = "你好" }
+    )
+} | ConvertTo-Json -Depth 3
+
+$response = Invoke-RestMethod -Uri "https://sub.orionisli.cn/v1/chat/completions" -Method Post -Headers $headers -Body $body
+$response.choices[0].message.content
+```
+
+## 提示
+
+<Tip>
+  在 Windows CMD 中使用 curl 时，JSON 中的双引号需要转义。建议使用 PowerShell 或 Git Bash。
+</Tip>
+
+<Note>
+  使用 `| jq` 管道可以让 JSON 响应更易读：`curl ... | jq .`
+</Note>
